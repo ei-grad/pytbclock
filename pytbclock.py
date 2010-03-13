@@ -27,12 +27,6 @@ def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
                         tb.change_cell(x + i*wx + i1, y+j*wy+j1, u' ',
                             termbox.BLACK, c)
 
-#            elif digit[d][j][i] == '0':
-#                for i1 in range(wx):
-#                    for j1 in range(wy):
-#                        tb.change_cell(x+i*wx+i1, y+j*wy+j1, u' ',
-#                            termbox.BLACK, termbox.BLACK)
-
 def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
     
     for i in range(dx):
@@ -91,6 +85,9 @@ class Clock(object):
 with termbox.Termbox() as tb:
 
     clock = Clock(tb)
+    
+    old_sec = time.localtime().tm_sec
+
     tb.clear()
     clock.draw()
     tb.present()
@@ -105,9 +102,15 @@ with termbox.Termbox() as tb:
                 run_app = False
             elif type == termbox.EVENT_RESIZE:
                 tb.clear()
+                clock.draw()
+                tb.present()
         else:
-            tb.clear()
-            clock.draw()
-            tb.present()
+            if old_sec != time.localtime().tm_sec:
+                old_sec = time.localtime().tm_sec
+
+                tb.clear()
+                clock.draw()
+                tb.present()
+
 
 
