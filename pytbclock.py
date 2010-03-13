@@ -2,9 +2,7 @@
 # coding: utf-8
 
 import sys, time
-
 import termbox
-
 
 def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
 
@@ -24,8 +22,8 @@ def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
             if digit[d][j][i] == '1':
                 for i1 in range(wx):
                     for j1 in range(wy):
-                        tb.change_cell(x + i*wx + i1, y+j*wy+j1, u' ',
-                            termbox.BLACK, c)
+                        tb.change_cell(x + i * wx + i1, y + j * wy + j1,
+                            u' ', termbox.BLACK, c)
 
 def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
     
@@ -47,14 +45,14 @@ class Clock(object):
         max_w, max_h = self.tb.width(), self.tb.height()
         
         wx, wy = 1, 1
-        while max_w > (wx + 1) * 3 * 6 + (wx + 1) * 11:
+        while max_w > (wx + 1) * 27 + (wx + 1) * 2:
             wx += 1
         while max_h > (wy + 1) * 5 + (wy + 1) * 2:
             wy += 1
 
         dx, dy = wx, wy
 
-        while max_w > wx * 3 * 6 + (dx + 1) * 11:
+        while max_w > wx * 27 + (dx + 1) * 2:
             dx += 1
         while max_h > wy * 5 + (dy + 1) * 2:
             dy += 1
@@ -66,19 +64,19 @@ class Clock(object):
         y = dy
         x = dx
         draw_digit(self.tb, int(t[0]), x, y, wx, wy) # 1 digit
-        x += 3 * wx + dx # digit and space
+        x += 3 * wx + wx # digit and space
         draw_digit(self.tb, int(t[1]), x, y, wx, wy) # 2 digit
-        x += 3 * wx + dx # digit and space
+        x += 3 * wx + wx # digit and space
         draw_delimeter(self.tb, x, y, wx, wy) # :
-        x += 2 * dx
+        x += 2 * wx # delimeter and space
         draw_digit(self.tb, int(t[2]), x, y, wx, wy) # 3 digit
-        x += 3 * wx + dx
+        x += 3 * wx + wx # digit and space
         draw_digit(self.tb, int(t[3]), x, y, wx, wy) # 4 digit
-        x += 3 * wx + dx
+        x += 3 * wx + wx # digit and space
         draw_delimeter(self.tb, x, y, wx, wy) # :
-        x += 2 * dx
+        x += 2 * wx # delimeter and space
         draw_digit(self.tb, int(t[4]), x, y, wx, wy) # 5 digit
-        x += 3 * wx + dx
+        x += 3 * wx + wx # digit and space
         draw_digit(self.tb, int(t[5]), x, y, wx, wy) # 6 digit
        
 
@@ -111,6 +109,4 @@ with termbox.Termbox() as tb:
                 tb.clear()
                 clock.draw()
                 tb.present()
-
-
 
