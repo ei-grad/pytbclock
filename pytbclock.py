@@ -29,7 +29,7 @@ def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
     
     for i in range(dx):
         for j in range(dy, 2 * dy)  + range(3 * dy, 4 * dy):
-            tb.change_cell(x + i, y + j, u' ', termbox.BLACK, c)
+            tb.change_cell(x + i, y + j, 32, termbox.BLACK, c)
 
 class Clock(object):
 
