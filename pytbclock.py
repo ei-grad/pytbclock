@@ -23,7 +23,7 @@ def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
                 for i1 in range(wx):
                     for j1 in range(wy):
                         tb.change_cell(x + i * wx + i1, y + j * wy + j1,
-                            u' ', termbox.BLACK, c)
+                            32, termbox.BLACK, c) # 32 == ord(' ')
 
 def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
     
