@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 # coding: utf-8
 #
 # Copyright (C) 2010 Andrew Grigorev <andrew@ei-grad.ru>
@@ -21,46 +21,45 @@
 import sys, time
 import termbox
 
+
+DIGITS = [ ['111', '101', '101', '101', '111'],
+           ['001', '001', '001', '001', '001'],
+           ['111', '001', '111', '100', '111'],
+           ['111', '001', '111', '001', '111'],
+           ['101', '101', '111', '001', '001'],
+           ['111', '100', '111', '001', '111'],
+           ['111', '100', '111', '101', '111'],
+           ['111', '001', '001', '001', '001'],
+           ['111', '101', '111', '101', '111'],
+           ['111', '101', '111', '001', '111']  ]
+
+
 def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
-
-    digit = [ ['111', '101', '101', '101', '111'],
-              ['001', '001', '001', '001', '001'],
-              ['111', '001', '111', '100', '111'],
-              ['111', '001', '111', '001', '111'],
-              ['101', '101', '111', '001', '001'],
-              ['111', '100', '111', '001', '111'],
-              ['111', '100', '111', '101', '111'],
-              ['111', '001', '001', '001', '001'],
-              ['111', '101', '111', '101', '111'],
-              ['111', '101', '111', '001', '111']  ]
-
     for i in range(3):
         for j in range(5):
-            if digit[d][j][i] == '1':
+            if DIGITS[d][j][i] == '1':
                 for i1 in range(wx):
                     for j1 in range(wy):
                         tb.change_cell(x + i * wx + i1, y + j * wy + j1,
                             32, termbox.BLACK, c) # 32 == ord(' ')
 
+
 def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
-    
     for i in range(dx):
         for j in range(dy, 2 * dy)  + range(3 * dy, 4 * dy):
             tb.change_cell(x + i, y + j, 32, termbox.BLACK, c)
 
+
 class Clock(object):
 
-    def __init__(self, tb, w=1):
-        self.wx = w
-        self.wy = w
-        self.tb = tb
-
     def draw(self):
-        
+
+        self.tb.clear()
+
         # calculate dimensions
-        
+
         max_w, max_h = self.tb.width(), self.tb.height()
-        
+
         wx, wy = 1, 1
         while max_w > (wx + 1) * 27 + (wx + 1) * 2:
             wx += 1
@@ -95,35 +94,31 @@ class Clock(object):
         draw_digit(self.tb, int(t[4]), x, y, wx, wy) # 5 digit
         x += 3 * wx + wx # digit and space
         draw_digit(self.tb, int(t[5]), x, y, wx, wy) # 6 digit
-       
 
-with termbox.Termbox() as tb:
+        self.tb.present()
 
-    clock = Clock(tb)
-    
-    old_sec = time.localtime().tm_sec
+    def run(self):
 
-    tb.clear()
-    clock.draw()
-    tb.present()
+        with termbox.Termbox() as tb:
 
-    run_app = True
+            self.tb = tb
+            old_sec = time.localtime().tm_sec
+            key_pressed = False
 
-    while run_app:
-        event = tb.peek_event(100)
-        if event:
-            type, ch, key, mod, w, h = event
-            if type == termbox.EVENT_KEY:
-                run_app = False
-            elif type == termbox.EVENT_RESIZE:
-                tb.clear()
-                clock.draw()
-                tb.present()
-        else:
-            if old_sec != time.localtime().tm_sec:
-                old_sec = time.localtime().tm_sec
+            self.draw()
 
-                tb.clear()
-                clock.draw()
-                tb.present()
+            while not key_pressed:
+                event = tb.peek_event(100)
+                if event:
+                    event_type, ch, key, mod, w, h = event
+                    if event_type == termbox.EVENT_KEY:
+                        key_pressed = True
+                    elif event_type == termbox.EVENT_RESIZE:
+                        self.draw()
+                else:
+                    if old_sec != time.localtime().tm_sec:
+                        old_sec = time.localtime().tm_sec
+                        self.draw()
 
+if __name__ == "__main__":
+    Clock().run()
