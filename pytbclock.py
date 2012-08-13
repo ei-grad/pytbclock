@@ -52,7 +52,7 @@ def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
 
 class Clock(object):
 
-    def draw(self):
+    def draw(self, t):
 
         self.tb.clear()
 
@@ -74,8 +74,6 @@ class Clock(object):
             dy += 1
 
         # drawing
-
-        t = time.strftime("%H%M%S")
 
         y = dy
         x = dx
@@ -102,7 +100,7 @@ class Clock(object):
         with termbox.Termbox() as tb:
 
             self.tb = tb
-            old_sec = time.localtime().tm_sec
+            prev_time = time.strftime("%H%M%S")
             key_pressed = False
 
             self.draw()
@@ -116,9 +114,10 @@ class Clock(object):
                     elif event_type == termbox.EVENT_RESIZE:
                         self.draw()
                 else:
-                    if old_sec != time.localtime().tm_sec:
-                        old_sec = time.localtime().tm_sec
-                        self.draw()
+                    new_time = time.strftime("%H%M%S")
+                    if new_time != prev_time:
+                        prev_time = new_time
+                        self.draw(new_time)
 
 if __name__ == "__main__":
     Clock().run()
