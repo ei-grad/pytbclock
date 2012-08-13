@@ -18,7 +18,7 @@
 #
 
 
-import sys, time
+import time
 import termbox
 
 
@@ -112,7 +112,7 @@ class Clock(object):
                     if event_type == termbox.EVENT_KEY:
                         key_pressed = True
                     elif event_type == termbox.EVENT_RESIZE:
-                        self.draw()
+                        self.draw(prev_time)
                 else:
                     new_time = time.strftime("%H%M%S")
                     if new_time != prev_time:
