@@ -103,7 +103,7 @@ class Clock(object):
             prev_time = time.strftime("%H%M%S")
             key_pressed = False
 
-            self.draw()
+            self.draw(prev_time)
 
             while not key_pressed:
                 event = tb.peek_event(100)
