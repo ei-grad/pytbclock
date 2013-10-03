@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # coding: utf-8
 #
 # Copyright (C) 2010 Andrew Grigorev <andrew@ei-grad.ru>
@@ -20,6 +20,7 @@
 
 import time
 import termbox
+from itertools import chain
 
 
 DIGITS = [ ['111', '101', '101', '101', '111'],
@@ -46,7 +47,7 @@ def draw_digit(tb, d, x, y, wx, wy, c=termbox.GREEN):
 
 def draw_delimeter(tb, x, y, dx, dy, c=termbox.GREEN):
     for i in range(dx):
-        for j in range(dy, 2 * dy)  + range(3 * dy, 4 * dy):
+        for j in chain(range(dy, 2 * dy), range(3 * dy, 4 * dy)):
             tb.change_cell(x + i, y + j, 32, termbox.BLACK, c)
 
 
