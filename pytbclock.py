@@ -109,7 +109,7 @@ class Clock(object):
             while not key_pressed:
                 event = tb.peek_event(100)
                 if event:
-                    event_type, ch, key, mod, w, h = event
+                    event_type = event[0]
                     if event_type == termbox.EVENT_KEY:
                         key_pressed = True
                     elif event_type == termbox.EVENT_RESIZE:
